@@ -1,0 +1,13 @@
+﻿{
+	"profiles": {
+		"grpc-streaming": {
+			"commandName": "Project",
+			"dotnetRunMessages": "true",
+			"launchBrowser": true,
+			"launchUrl": "swagger",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			}
+		}
+	}
+}

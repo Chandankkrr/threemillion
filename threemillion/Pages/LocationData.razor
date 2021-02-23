@@ -1,0 +1,93 @@
+﻿@page "/locationdata"
+
+@using Grpc.Core
+@using GPRCStreaming
+@using threemillion.Data
+@using System.Diagnostics
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+@inject IJSRuntime JSRuntime;
+@inject System.Net.Http.IHttpClientFactory _clientFactory
+@inject GPRCStreaming.LocationData.LocationDataClient _locationDataClient
+
+<table class="tableAction">
+    <tbody>
+        <tr>
+            <td>
+                <div class="data-input">
+                    <label for="dataLimit">No of records to fetch</label>
+                    <input id="dataLimit" type="number" @bind="_dataLimit" />
+                    <button @onclick="FetchData" class="btn-submit">Call gRPC</button>
+                </div>
+            </td>
+            <td>
+                <p class="info">
+                    Total records: <span class="count">@_locations.Count</span>
+                </p>
+                <p class="info">
+                    Time taken: <span class="time">@_stopWatch.ElapsedMilliseconds</span> milliseconds
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="tableFixHead">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Longitude</th>
+                <th>Latitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="@_locations" Context="locations">
+                <tr>
+                    <td>@locations.LongitudeE7</td>
+                    <td>@locations.LatitudeE7</td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private int _dataLimit = 1000;
+
+    private List<Location> _locations = new List<Location>();
+
+    private Stopwatch _stopWatch = new Stopwatch();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchData();
+    }
+
+    private async Task FetchData()
+    {
+        ResetState();
+
+        _stopWatch.Start();
+
+        using (var call = _locationDataClient.GetLocations(new GetLocationsRequest { DataLimit = _dataLimit }))
+        {
+            await foreach (var response in call.ResponseStream.ReadAllAsync())
+            {
+                _locations.Add(new Location { LongitudeE7 = response.LongitudeE7, LatitudeE7 = response.LatitudeE7 });
+
+                StateHasChanged();
+            }
+        }
+
+        _stopWatch.Stop();
+    }
+
+    private void ResetState()
+    {
+        _locations.Clear();
+
+        _stopWatch.Reset();
+        
+        StateHasChanged();
+    }
+}

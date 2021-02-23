@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "GPRCStreaming";
+
+package location_data;
+
+service LocationData {
+  rpc GetLocations (GetLocationsRequest) returns (stream GetLocationsResponse);
+  rpc GetAllLocations (GetAllLocationsRequest) returns (stream GetAllLocationsResponse);
+}
+
+message GetLocationsRequest {
+  int32 dataLimit = 1;
+}
+
+message GetLocationsResponse {
+  int32 latitudeE7 = 1;
+  int32 longitudeE7 = 2;
+}
+
+message GetAllLocationsRequest {
+}
+
+message GetAllLocationsResponse {
+  int32 latitudeE7 = 1;
+  int32 longitudeE7 = 2;
+}

@@ -1,0 +1,159 @@
+﻿@page "/"
+@namespace threemillion.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>threemillion</title>
+    <base href="~/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/1.12.0/mapbox-gl.js" integrity="sha512-x4VI1WtMDwnLmWbilyxh5a42yPDkkAeABzUX2y3OrUOCI2H4EXIE8PnJcl0PaeCA0MpuNBw1UfdK+VNceoUp6A==" crossorigin="anonymous"></script>
+    <link href='https://api.mapbox.com/mapbox-assembly/mbx/v0.18.0/assembly.min.css' rel='stylesheet'>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <div id='map' style="display: none;"></div>
+
+
+    <script src="_framework/blazor.server.js"></script>
+    <script>
+        window.mapBoxFunctions = {
+            initMapBox: function () {
+                mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+                window.map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/dark-v10',
+                    center: [144.9994491, -37.7569673],
+                    zoom: 2
+                });
+
+                window.map.on('load', function () {
+                    window.map.addSource('travelledLocations', {
+                        type: 'geojson',
+                        data: {
+                            type: "FeatureCollection",
+                            features: [{
+                                type: "Feature",
+                                geometry: {
+                                    type: "Point",
+                                    coordinates: [145.0043582, -37.7563547]
+                                }
+                            }]
+                        },
+                        cluster: true,
+                        clusterMaxZoom: 14,
+                        clusterRadius: 50
+                    });
+                    window.map.addLayer({
+                        id: 'clusters',
+                        type: 'circle',
+                        source: 'travelledLocations',
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#51bbd6',
+                                100,
+                                '#f1f075',
+                                750,
+                                '#f28cb1'
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40
+                            ]
+                        }
+                    });
+
+                    window.map.addLayer({
+                        id: 'cluster-count',
+                        type: 'symbol',
+                        source: 'travelledLocations',
+                        filter: ['has', 'point_count'],
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12
+                        }
+                    });
+
+                    window.map.addLayer({
+                        id: 'unclustered-point',
+                        type: 'circle',
+                        source: 'travelledLocations',
+                        filter: ['!', ['has', 'point_count']],
+                        paint: {
+                            'circle-color': '#11b4da',
+                            'circle-radius': 4,
+                            'circle-stroke-width': 1,
+                            'circle-stroke-color': '#fff'
+                        }
+                    });
+                    DotNet.invokeMethodAsync('threemillion', 'LoadClusterData')
+                })
+                return;
+            },
+            addClusterData: function (features) {
+                var travelledLocations = window.map.getSource("travelledLocations")
+                travelledLocations.setData({
+                    type: "FeatureCollection",
+                    features: []
+                });
+
+                console.log("Got here");
+
+                travelledLocations.setData({
+                    type: "FeatureCollection",
+                    features
+                });
+            },
+            addToClusterData: function (dataPoint) {
+                var travelledLocations = window.map.getSource("travelledLocations")
+                var features = travelledLocations._data.features
+                features.push(dataPoint)
+                @* var updatedLocations = [...features, dataPoint]  *@
+
+                travelledLocations.setData({
+                    type: "FeatureCollection",
+                    features
+                });
+            },
+            clearClusterData: function () {
+                var travelledLocations = window.map.getSource("travelledLocations")
+                travelledLocations.setData({
+                    type: "FeatureCollection",
+                    features: []
+                });
+            },
+        };
+    </script>
+</body>
+</html>

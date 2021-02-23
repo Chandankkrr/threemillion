@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.809.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "grpc-streaming", "..\grpc-streaming\grpc-streaming.csproj", "{74EFD50E-1DB0-4325-914E-112C3F6A38F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "threemillion", "threemillion\threemillion.csproj", "{3816D60B-8D11-4F96-8E27-FA3B8D1FB081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "threemillion", "..\..\Projects\threemillion\threemillion\threemillion.csproj", "{272B815E-533A-4D11-A41A-C74FE987E41C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "grpc-streaming", "grpc-streaming\grpc-streaming.csproj", "{9AF23E09-F176-4424-9640-9A79E4BE2C7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74EFD50E-1DB0-4325-914E-112C3F6A38F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74EFD50E-1DB0-4325-914E-112C3F6A38F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74EFD50E-1DB0-4325-914E-112C3F6A38F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74EFD50E-1DB0-4325-914E-112C3F6A38F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{272B815E-533A-4D11-A41A-C74FE987E41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{272B815E-533A-4D11-A41A-C74FE987E41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{272B815E-533A-4D11-A41A-C74FE987E41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{272B815E-533A-4D11-A41A-C74FE987E41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3816D60B-8D11-4F96-8E27-FA3B8D1FB081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3816D60B-8D11-4F96-8E27-FA3B8D1FB081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3816D60B-8D11-4F96-8E27-FA3B8D1FB081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3816D60B-8D11-4F96-8E27-FA3B8D1FB081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF23E09-F176-4424-9640-9A79E4BE2C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF23E09-F176-4424-9640-9A79E4BE2C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF23E09-F176-4424-9640-9A79E4BE2C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF23E09-F176-4424-9640-9A79E4BE2C7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
